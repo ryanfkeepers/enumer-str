@@ -1,4 +1,4 @@
-# Enumer [![GoDoc](https://godoc.org/github.com/ryanfkeepers/enumer-str?status.svg)](https://godoc.org/github.com/ryanfkeepers/enumer-str) [![Go Report Card](https://goreportcard.com/badge/github.com/ryanfkeepers/enumer-str)](https://goreportcard.com/report/github.com/ryanfkeepers/enumer-str) [![GitHub Release](https://img.shields.io/github/release/ryanfkeepers/enumer-str.svg)](https://github.com/ryanfkeepers/enumer-str/releases)
+# Enumer-str [![GoDoc](https://godoc.org/github.com/ryanfkeepers/enumer-str?status.svg)](https://godoc.org/github.com/ryanfkeepers/enumer-str) [![Go Report Card](https://goreportcard.com/badge/github.com/ryanfkeepers/enumer-str)](https://goreportcard.com/report/github.com/ryanfkeepers/enumer-str) [![GitHub Release](https://img.shields.io/github/release/ryanfkeepers/enumer-str.svg)](https://github.com/ryanfkeepers/enumer-str/releases)
 
 Enumer is a tool to generate Go code that adds useful methods to Go enums (constants with a specific type).
 It started as a fork of [Rob Pike’s Stringer tool](https://godoc.org/golang.org/x/tools/cmd/stringer)
