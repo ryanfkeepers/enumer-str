@@ -1,0 +1,37 @@
+
+const _DayConcat = "FridayMondaySaturdaySundayThursdayTuesdayWednesday"
+
+var _DayIndex = [...]uint8{0, 6, 12, 20, 26, 34, 41, 50}
+
+var _DayValues = []Day{Friday, Monday, Saturday, Sunday, Thursday, Tuesday, Wednesday}
+
+var _DayNameToValueMap = map[string]Day{
+    _DayConcat[0:6]:   Friday,
+    _DayConcat[6:12]:  Monday,
+    _DayConcat[12:20]: Saturday,
+    _DayConcat[20:26]: Sunday,
+    _DayConcat[26:34]: Thursday,
+    _DayConcat[34:41]: Tuesday,
+    _DayConcat[41:50]: Wednesday,
+}
+
+// DayValues returns all values of the enum
+func DayValues() []Day {
+    return _DayValues
+}
+
+// IsValid returns "true" if the value is listed in the enum definition. "false" otherwise
+func (i Day) IsValid() bool {
+    return IsAValidDay(string(i))
+}
+
+// IsAValidDay returns "true" if the value is listed in the enum definition. "false" otherwise
+func IsAValidDay(s string) bool {
+    for _, v := range _DayValues {
+        if s == string(v) {
+            return true
+        }
+    }
+
+    return false
+}
