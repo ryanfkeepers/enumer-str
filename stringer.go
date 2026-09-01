@@ -17,7 +17,6 @@ import (
 	"go/format"
 	"go/token"
 	"go/types"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -121,17 +120,19 @@ func main() {
 	}
 
 	// Write to tmpfile first
-	tmpFile, err := ioutil.TempFile(dir, fmt.Sprintf("%s_enumer_", typs[0]))
+	tmpFile, err := os.CreateTemp(dir, fmt.Sprintf("%s_enumer_", typs[0]))
 	if err != nil {
 		log.Fatalf("creating temporary file for output: %s", err)
 	}
 	_, err = tmpFile.Write(src)
 	if err != nil {
-		tmpFile.Close()
-		os.Remove(tmpFile.Name())
+		_ = tmpFile.Close()
+		_ = os.Remove(tmpFile.Name())
 		log.Fatalf("writing output: %s", err)
 	}
-	tmpFile.Close()
+	if err := tmpFile.Close(); err != nil {
+		log.Fatalf("closing temporary file: %s", err)
+	}
 
 	// Rename tmpfile to output file
 	err = os.Rename(tmpFile.Name(), outputName)
@@ -172,11 +173,9 @@ type File struct {
 
 // Package holds information about a Go package
 type Package struct {
-	dir      string
-	name     string
-	defs     map[*ast.Ident]types.Object
-	files    []*File
-	typesPkg *types.Package
+	name  string
+	defs  map[*ast.Ident]types.Object
+	files []*File
 }
 
 // parsePackage analyzes the single package constructed from the patterns and tags.
@@ -263,17 +262,6 @@ type Value struct {
 
 func (v *Value) String() string {
 	return v.str
-}
-
-// byValue lets us sort the constants into increasing order.
-// We take care in the Less method to sort in signed or unsigned order,
-// as appropriate.
-type byValue []Value
-
-func (b byValue) Len() int      { return len(b) }
-func (b byValue) Swap(i, j int) { b[i], b[j] = b[j], b[i] }
-func (b byValue) Less(i, j int) bool {
-	return b[i].value < b[j].value
 }
 
 // genDecl processes one declaration clause.
