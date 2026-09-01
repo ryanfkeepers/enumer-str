@@ -114,7 +114,7 @@ func loadGolden(name string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	defer fh.Close()
+	defer func() { _ = fh.Close() }()
 	b, err := io.ReadAll(fh)
 	if err != nil {
 		return "", err

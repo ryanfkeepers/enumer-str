@@ -26,12 +26,6 @@ func IsAValid%[1]s(s string) bool {
 }
 `
 
-// Arguments to format are: [1]: type name
-const altStringValuesMethod = `func (%[1]s) Values() []string {
-	return %[1]sStrings()
-}
-`
-
 func (g *Generator) buildBasicExtras(values []Value, typeName string) {
 	// At this moment, either "g.declareIndexAndNameVars()" or "g.declareNameVars()" has been called
 

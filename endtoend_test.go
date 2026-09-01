@@ -12,7 +12,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -45,11 +44,15 @@ func TestEndToEnd(t *testing.T) {
 		}
 	}()
 
-	dir, err := ioutil.TempDir("", "enumerstr")
+	dir, err := os.MkdirTemp("", "enumerstr")
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer os.RemoveAll(dir)
+	defer func() {
+		if err := os.RemoveAll(dir); err != nil {
+			t.Error(err)
+		}
+	}()
 
 	// Create stringer in temporary directory.
 	stringer := filepath.Join(dir, fmt.Sprintf("enumerstr%s", GOEXE))
@@ -62,7 +65,11 @@ func TestEndToEnd(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	defer fd.Close()
+	defer func() {
+		if err := fd.Close(); err != nil {
+			t.Error(err)
+		}
+	}()
 	names, err := fd.Readdirnames(-1)
 	if err != nil {
 		t.Fatalf("Readdirnames: %s", err)
@@ -110,12 +117,12 @@ func copy(to, from string) error {
 	if err != nil {
 		return err
 	}
-	defer toFd.Close()
+	defer func() { _ = toFd.Close() }()
 	fromFd, err := os.Open(from)
 	if err != nil {
 		return err
 	}
-	defer fromFd.Close()
+	defer func() { _ = fromFd.Close() }()
 	_, err = io.Copy(toFd, fromFd)
 	return err
 }
